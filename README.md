@@ -4,3 +4,4 @@ The purpose of this project is to provide a sample implementation of an e-commer
 
 Programming language is Java 12 with heavy use of Spring framework, Docker and Kubernetes.
 
+!!! WORK IN PROGRESS !!!
