@@ -75,7 +75,7 @@ public class RedisConfig {
         private final RedisSerializer serializer;
         private final ApplicationEventPublisher publisher;
 
-        @Transactional(propagation = Propagation.REQUIRES_NEW) // important due to transactional listeners
+        @Transactional // important due to transactional listeners
         @Override
         public void onMessage(Message message, byte[] pattern) {
             publisher.publishEvent(serializer.deserialize(message.getBody()));
