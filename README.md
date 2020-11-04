@@ -4,8 +4,20 @@ The purpose of this project is to provide a sample implementation of an e-commer
 
 Programming language is Java 12 with heavy use of Spring framework, Docker and Kubernetes.
 
-!!! WORK IN PROGRESS !!!
+## !!! WORK IN PROGRESS !!!
 
+Planed work:
+
+- External messaging with Redis :white_check_mark:
+- External database PostgreSQL :white_check_mark:
+- Maven to Gradle migration
+- Services to microservices with Spring Boot
+- Microservices as Docker images
+- Docker-Compose for local development
+- Integration tests module
+- Kubernetes cluster
+- Monitoring
+- Security
 
 ## Message Broker
 
