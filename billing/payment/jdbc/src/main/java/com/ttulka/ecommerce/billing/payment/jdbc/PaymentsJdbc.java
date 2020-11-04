@@ -59,9 +59,9 @@ final class PaymentsJdbc implements Payments {
     @Override
     public Stream<Payment> stream() {
         var params = new ArrayList<>(queryParams);
-        params.add(start);
         params.add(limit);
-        return jdbcTemplate.queryForList(query.concat(" ORDER BY 1 LIMIT ?,?"), params.toArray())
+        params.add(start);
+        return jdbcTemplate.queryForList(query.concat(" ORDER BY 1 LIMIT ? OFFSET ?"), params.toArray())
                 .stream()
                 .map(this::toPayment);
     }

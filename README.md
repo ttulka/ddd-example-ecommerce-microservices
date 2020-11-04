@@ -30,3 +30,23 @@ To make the code independent of a concrete messaging implementation and easy to 
 In practice, this means that messages are published via `EventPublisher` abstraction and consumed via Spring's `@EventListener`.
 
 To make this work, the external messages are re-sent as Spring application events under the hood.   
+
+## Database
+
+The whole system uses one externalized database with particular tables owned exclusively by services.
+
+In a real-world system this separation would be further implemented by separate schemas/namespaces.
+
+As the database **PostgreSQL** instance could be used:
+
+```
+docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret -d postgres:13
+```
+
+Start the application with Spring profile `postgres`:
+
+```
+mvn spring-boot:run -Dspring-boot.run.profiles=postgres
+```
+
+When the `postgres` profile is not active, the system will fall-back to use H2 as the default database.
