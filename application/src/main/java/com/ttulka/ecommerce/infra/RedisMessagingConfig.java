@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Profile("redis")
 @Configuration
-public class RedisConfig {
+public class RedisMessagingConfig {
 
     @Primary
     @Bean

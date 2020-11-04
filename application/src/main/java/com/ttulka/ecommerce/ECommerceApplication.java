@@ -1,7 +1,8 @@
 package com.ttulka.ecommerce;
 
 import com.ttulka.ecommerce.common.events.EventPublisher;
-import com.ttulka.ecommerce.infra.RedisConfig;
+import com.ttulka.ecommerce.infra.RedisMessagingConfig;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,7 +17,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @EnableAsync
-@Import({RedisConfig.class})
+@Import({RedisMessagingConfig.class})
 public class ECommerceApplication {
 
     public static void main(String[] args) {
