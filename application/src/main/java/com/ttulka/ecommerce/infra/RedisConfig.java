@@ -2,7 +2,7 @@ package com.ttulka.ecommerce.infra;
 
 import com.ttulka.ecommerce.common.events.DomainEvent;
 import com.ttulka.ecommerce.common.events.EventPublisher;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,12 @@ import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Redis is used as a message broker.
@@ -32,20 +36,20 @@ public class RedisConfig {
 
     @Primary
     @Bean
-    EventPublisher redisEventPublisher(RedisTemplate<String, DomainEvent> redisTemplate, Topic topic) {
-        return evt -> redisTemplate.convertAndSend(topic.getTopic(), evt);
+    EventPublisher redisEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        return evt -> applicationEventPublisher.publishEvent(new DomainEventWrapper(evt));
     }
 
     @Bean
-    ChannelTopic channelTopic() {
+    ChannelTopic applicationTopic() {
         return new ChannelTopic("ecommerce");
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer(RedisConnectionFactory factory, MessageListenerAdapter adapter, Topic topic) {
+    RedisMessageListenerContainer redisContainer(RedisConnectionFactory factory, MessageListenerAdapter adapter, Topic applicationTopic) {
         var container = new RedisMessageListenerContainer();
         container.setConnectionFactory(factory);
-        container.addMessageListener(new MessageListenerAdapter(adapter), topic);
+        container.addMessageListener(new MessageListenerAdapter(adapter), applicationTopic);
         return container;
     }
 
@@ -54,8 +58,7 @@ public class RedisConfig {
         return new MessageListenerAdapter(eventListenerApplicationAdapter);
     }
 
-    @Bean
-        // it is important for this instance to be declared as a bean for @Transactional to take effect
+    @Bean // it is important for this instance to be declared as a bean for @Transactional in {@code EventListenerApplicationAdapter} to take effect
     EventListenerApplicationAdapter eventListenerApplicationAdapter(RedisSerializer redisSerializer, ApplicationEventPublisher applicationEventPublisher) {
         return new EventListenerApplicationAdapter(redisSerializer, applicationEventPublisher);
     }
@@ -68,7 +71,7 @@ public class RedisConfig {
         return template;
     }
 
-    // listens to Redis, re-publishes as Spring application events
+    // listens to Redis messages, re-publishes as Spring application events
     @RequiredArgsConstructor
     static class EventListenerApplicationAdapter implements MessageListener {
 
@@ -82,6 +85,22 @@ public class RedisConfig {
         }
     }
 
+    // listens to Spring application events, re-publishes as Redis messages
+    // this is important to make the events work in transactional manner
+    @Configuration // TODO component?
+    @RequiredArgsConstructor
+    static class ApplicationEventsListenerAdapter {
+
+        private final RedisTemplate<String, DomainEvent> redisTemplate;
+        private final Topic applicationTopic;
+
+        @TransactionalEventListener // only committed events are sent
+        @Async
+        public void on(DomainEventWrapper wrappedEvent) {
+            redisTemplate.convertAndSend(applicationTopic.getTopic(), wrappedEvent.getEvent());
+        }
+    }
+
     @Configuration
     static class SerializationConfig {
 
@@ -89,5 +108,13 @@ public class RedisConfig {
         JdkSerializationRedisSerializer jdkSerializationRedisSerializer() {
             return new JdkSerializationRedisSerializer();
         }
+    }
+
+    // wraps the original domain event to be sent via Spring application events and re-sent via Redis afterwards
+    @Getter
+    @RequiredArgsConstructor
+    private static class DomainEventWrapper {
+
+        private final DomainEvent event;
     }
 }

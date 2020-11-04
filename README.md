@@ -21,3 +21,12 @@ Start the application with Spring profile `redis`:
 mvn spring-boot:run -Dspring-boot.run.profiles=redis
 ```
 
+When the `redis` profile is not active, the system will fall-back to use of Spring application events as the default messaging mechanism.
+
+### Messaging Integration
+
+To make the code independent of a concrete messaging implementation and easy to use, Spring application events are used for the internal communication.
+
+In practice, this means that messages are published via `EventPublisher` abstraction and consumed via Spring's `@EventListener`.
+
+To make this work, the external messages are re-sent as Spring application events under the hood.   
