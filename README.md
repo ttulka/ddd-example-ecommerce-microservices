@@ -4,6 +4,12 @@ The purpose of this project is to provide a sample implementation of an e-commer
 
 Programming language is Java 11 with heavy use of Spring framework, Docker and Kubernetes.
 
+## Purpose of the Project
+
+This repository focuces mostly on cross-cutting, infrastructure and deployment concerns. 
+
+For domain and application concepts see [the original repository](https://github.com/ttulka/ddd-example-ecommerce). 
+
 ## !!! WORK IN PROGRESS !!!
 
 Planed work:
