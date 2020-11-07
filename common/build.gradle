@@ -5,8 +5,8 @@ plugins {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'io.spring.dependency-management'
     apply plugin: 'maven-publish'
+    apply plugin: 'io.spring.dependency-management'
 
     group = 'com.ttulka.ecommerce.common'
     version = '2.0-SNAPSHOT'
@@ -30,14 +30,14 @@ subprojects {
         withSourcesJar()
     }
 
-    test {
-        useJUnitPlatform()
-    }
-
     javadoc {
         if (JavaVersion.current().isJava9Compatible()) {
             options.addBooleanOption('html5', true)
         }
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
     publishing {

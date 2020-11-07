@@ -1,0 +1,6 @@
+dependencies {
+    api 'com.ttulka.ecommerce.common:common-events:2.0-SNAPSHOT'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}

@@ -1,4 +1,5 @@
 dependencies {
+    api project(':events')
     api 'com.ttulka.ecommerce.common:common-primitives:2.0-SNAPSHOT'
 
     compileOnly 'org.projectlombok:lombok'
