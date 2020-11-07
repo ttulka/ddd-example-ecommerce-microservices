@@ -1,0 +1,5 @@
+rootProject.name = 'catalog-modules'
+
+include 'domain'
+include 'jdbc'
+include 'spring-boot-starter'

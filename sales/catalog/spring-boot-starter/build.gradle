@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':jdbc')
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+}
+
+javadoc {
+    enabled = false
+}

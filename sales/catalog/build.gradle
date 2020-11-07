@@ -4,12 +4,11 @@ plugins {
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.ttulka.ecommerce.common'
+    group = 'com.ttulka.ecommerce.sales'
     version = '2.0-SNAPSHOT'
 
     sourceCompatibility = 11
@@ -44,7 +43,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'common-' + project.name
+                artifactId = 'catalog-' + project.name
                 from components.java
                 versionMapping {
                     usage('java-api') {
@@ -57,4 +56,10 @@ subprojects {
             }
         }
     }
+}
+
+task build {
+    dependsOn ':domain:build'
+    dependsOn ':jdbc:build'
+    dependsOn ':spring-boot-starter:build'
 }
