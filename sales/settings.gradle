@@ -1,5 +1,0 @@
-rootProject.name = 'sales-modules'
-
-includeBuild 'cart'
-includeBuild 'order'
-includeBuild 'catalog'

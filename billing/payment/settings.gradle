@@ -1,0 +1,8 @@
+rootProject.name = 'payment-modules'
+
+include 'events'
+include 'domain'
+include 'jdbc'
+include 'listeners'
+include 'rest'
+include 'spring-boot-starter'

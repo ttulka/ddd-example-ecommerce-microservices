@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.ttulka.ecommerce.sales'
+    group = 'com.ttulka.ecommerce.shipping'
     version = '2.0-SNAPSHOT'
 
     sourceCompatibility = 11
@@ -43,7 +43,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'order-' + project.name
+                artifactId = 'delivery-' + project.name
                 from components.java
                 versionMapping {
                     usage('java-api') {
@@ -62,5 +62,6 @@ task build {
     dependsOn ':events:build'
     dependsOn ':domain:build'
     dependsOn ':jdbc:build'
+    dependsOn ':rest:build'
     dependsOn ':spring-boot-starter:build'
 }

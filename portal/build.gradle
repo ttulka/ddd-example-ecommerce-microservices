@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.ttulka.ecommerce.sales'
+    group = 'com.ttulka.ecommerce.portal'
     version = '2.0-SNAPSHOT'
 
     sourceCompatibility = 11
@@ -25,17 +25,6 @@ subprojects {
         mavenCentral()
     }
 
-    java {
-        withJavadocJar()
-        withSourcesJar()
-    }
-
-    javadoc {
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.addBooleanOption('html5', true)
-        }
-    }
-
     test {
         useJUnitPlatform()
     }
@@ -43,7 +32,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'order-' + project.name
+                artifactId = 'portal-' + project.name
                 from components.java
                 versionMapping {
                     usage('java-api') {
@@ -56,11 +45,4 @@ subprojects {
             }
         }
     }
-}
-
-task build {
-    dependsOn ':events:build'
-    dependsOn ':domain:build'
-    dependsOn ':jdbc:build'
-    dependsOn ':spring-boot-starter:build'
 }

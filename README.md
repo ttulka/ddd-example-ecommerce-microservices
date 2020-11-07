@@ -68,3 +68,21 @@ mvn spring-boot:run -Dspring-boot.run.profiles=postgres
 ```
 
 When the `postgres` profile is not active, the system will fall-back to use H2 as the default database.
+
+## Gradle Build 
+
+IN PROGRESS
+
+Every microservice must be build separately:
+```
+gradle build publishToMavenLocal -b common/build.gradle
+gradle build publishToMavenLocal -b sales/catalog/build.gradle 
+gradle build publishToMavenLocal -b sales/order/build.gradle 
+gradle build publishToMavenLocal -b sales/cart/build.gradle 
+gradle build publishToMavenLocal -b billing/payment/build.gradle
+gradle build publishToMavenLocal -b shipping/delivery/build.gradle
+gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
+gradle build publishToMavenLocal -b warehouse/build.gradle
+gradle build publishToMavenLocal -b portal/build.gradle
+gradle test bootRun -b application/build.gradle
+```

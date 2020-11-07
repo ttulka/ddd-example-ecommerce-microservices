@@ -1,0 +1,6 @@
+rootProject.name = 'dispatching-modules'
+
+include 'domain'
+include 'jdbc'
+include 'listeners'
+include 'spring-boot-starter'

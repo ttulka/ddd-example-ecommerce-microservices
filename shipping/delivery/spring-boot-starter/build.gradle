@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':jdbc')
+    implementation project(':rest')
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+javadoc {
+    enabled = false
+}

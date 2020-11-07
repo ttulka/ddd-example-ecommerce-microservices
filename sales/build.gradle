@@ -1,5 +1,0 @@
-task build {
-    dependsOn gradle.includedBuild('cart').task(':build')
-    dependsOn gradle.includedBuild('order').task(':build')
-    dependsOn gradle.includedBuild('catalog').task(':build')
-}

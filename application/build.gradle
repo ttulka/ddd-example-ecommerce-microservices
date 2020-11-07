@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${springBoot}"
+    id 'io.spring.dependency-management' version "${dependencyManagement}"
+}
+
+group = 'com.ttulka.ecommerce'
+version = '2.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    implementation 'com.ttulka.ecommerce.sales:catalog-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.sales:cart-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.sales:order-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.warehouse:warehouse-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.billing:payment-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.shipping:delivery-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.shipping:dispatching-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.portal:portal-spring-boot-starter:2.0-SNAPSHOT'
+    implementation 'com.ttulka.ecommerce.common:common-events:2.0-SNAPSHOT'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.h2database:h2'
+    implementation 'org.postgresql:postgresql'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'com.tngtech.archunit:archunit:0.13.1'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+    include '**/**Test.class'
+}
