@@ -1,0 +1,5 @@
+rootProject.name = 'cart-modules'
+
+include 'domain'
+include 'jdbc'
+include 'spring-boot-starter'

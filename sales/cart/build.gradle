@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version "${springBoot}" apply false
+    id 'io.spring.dependency-management' version "${dependencyManagement}"
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.ttulka.ecommerce'
+    version = '2.0-SNAPSHOT'
+
+    sourceCompatibility = 11
+    targetCompatibility = 11
+
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+task build {
+    dependsOn ':domain:build'
+    dependsOn ':jdbc:build'
+    dependsOn ':spring-boot-starter:build'
+}

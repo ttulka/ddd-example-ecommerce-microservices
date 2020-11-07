@@ -1,0 +1,15 @@
+dependencies {
+    implementation project(':domain')
+    implementation 'com.ttulka.ecommerce.common:common-primitives:2.0-SNAPSHOT'
+
+    implementation 'org.springframework:spring-jdbc'
+    implementation 'org.springframework:spring-tx'
+    implementation 'org.springframework:spring-jdbc'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    testRuntimeOnly 'com.h2database:h2'
+}

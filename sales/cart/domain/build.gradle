@@ -1,0 +1,9 @@
+dependencies {
+    implementation 'com.ttulka.ecommerce.common:common-primitives:2.0-SNAPSHOT'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core'
+}
