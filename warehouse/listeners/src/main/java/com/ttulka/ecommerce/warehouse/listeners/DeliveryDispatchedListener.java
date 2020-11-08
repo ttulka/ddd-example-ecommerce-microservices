@@ -1,6 +1,6 @@
 package com.ttulka.ecommerce.warehouse.listeners;
 
-import com.ttulka.ecommerce.shipping.delivery.DeliveryDispatched;
+import com.ttulka.ecommerce.shipping.dispatching.DeliveryDispatched;
 import com.ttulka.ecommerce.warehouse.OrderId;
 import com.ttulka.ecommerce.warehouse.RemoveFetchedGoods;
 

@@ -1,5 +1,6 @@
 rootProject.name = 'dispatching-modules'
 
+include 'events'
 include 'domain'
 include 'jdbc'
 include 'listeners'

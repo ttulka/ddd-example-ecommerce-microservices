@@ -1,3 +1,4 @@
+
 # DDD Microservices Example Project in Java: E-Commerce)
 
 The purpose of this project is to provide a sample implementation of an e-commerce product following **Domain-Driven Design (DDD)** and **Service-Oriented Architecture (SOA)** principles.
@@ -76,13 +77,22 @@ IN PROGRESS
 Every microservice must be build separately:
 ```
 gradle build publishToMavenLocal -b common/build.gradle
+
+gradle events:build events:publishToMavenLocal -b billing/payment/build.gradle
+gradle events:build events:publishToMavenLocal -b sales/order/build.gradle
+gradle events:build events:publishToMavenLocal -b shipping/delivery/build.gradle
+gradle events:build events:publishToMavenLocal -b shipping/dispatching/build.gradle
+gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
+
 gradle build publishToMavenLocal -b sales/catalog/build.gradle 
 gradle build publishToMavenLocal -b sales/order/build.gradle 
 gradle build publishToMavenLocal -b sales/cart/build.gradle 
 gradle build publishToMavenLocal -b billing/payment/build.gradle
-gradle build publishToMavenLocal -b shipping/delivery/build.gradle
-gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
 gradle build publishToMavenLocal -b warehouse/build.gradle
+gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
+gradle build publishToMavenLocal -b shipping/delivery/build.gradle
+
 gradle build publishToMavenLocal -b portal/build.gradle
+
 gradle test bootRun -b application/build.gradle
 ```
