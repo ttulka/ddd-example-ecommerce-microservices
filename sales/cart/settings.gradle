@@ -1,4 +1,4 @@
-rootProject.name = 'cart-modules'
+rootProject.name = 'cart'
 
 include 'domain'
 include 'jdbc'

@@ -1,4 +1,4 @@
-rootProject.name = 'common-modules'
+rootProject.name = 'common'
 
 include 'events'
 include 'primitives'

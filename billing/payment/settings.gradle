@@ -1,4 +1,4 @@
-rootProject.name = 'payment-modules'
+rootProject.name = 'payment'
 
 include 'events'
 include 'domain'

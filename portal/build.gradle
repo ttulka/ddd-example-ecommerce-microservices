@@ -32,7 +32,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'portal-' + project.name
+                artifactId = rootProject.name + '-' + project.name
                 from components.java
                 versionMapping {
                     usage('java-api') {

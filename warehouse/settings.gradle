@@ -1,4 +1,4 @@
-rootProject.name = 'warehouse-modules'
+rootProject.name = 'warehouse'
 
 include 'events'
 include 'domain'

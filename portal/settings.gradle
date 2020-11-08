@@ -1,4 +1,4 @@
-rootProject.name = 'portal-modules'
+rootProject.name = 'portal'
 
 include 'use-cases'
 include 'web'

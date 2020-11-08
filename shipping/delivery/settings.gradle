@@ -1,4 +1,4 @@
-rootProject.name = 'delivery-modules'
+rootProject.name = 'delivery'
 
 include 'events'
 include 'domain'

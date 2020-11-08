@@ -1,4 +1,4 @@
-rootProject.name = 'dispatching-modules'
+rootProject.name = 'dispatching'
 
 include 'events'
 include 'domain'

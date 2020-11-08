@@ -1,4 +1,4 @@
-rootProject.name = 'catalog-modules'
+rootProject.name = 'catalog'
 
 include 'domain'
 include 'jdbc'

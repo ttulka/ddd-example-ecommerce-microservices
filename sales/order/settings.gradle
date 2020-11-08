@@ -1,4 +1,4 @@
-rootProject.name = 'order-modules'
+rootProject.name = 'order'
 
 include 'events'
 include 'domain'

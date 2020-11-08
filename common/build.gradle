@@ -44,7 +44,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId = 'common-' + project.name
+                artifactId = rootProject.name + '-' + project.name
                 from components.java
                 versionMapping {
                     usage('java-api') {
