@@ -57,9 +57,3 @@ subprojects {
         }
     }
 }
-
-task build {
-    dependsOn ':domain:build'
-    dependsOn ':jdbc:build'
-    dependsOn ':spring-boot-starter:build'
-}

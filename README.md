@@ -74,16 +74,24 @@ When the `postgres` profile is not active, the system will fall-back to use H2 a
 
 IN PROGRESS
 
-Every microservice must be build separately:
+Every microservice must be build separately.
+
+First, publish common dependencies:
 ```
 gradle build publishToMavenLocal -b common/build.gradle
+```
 
+Second, publish public APIs of services:
+``` 
 gradle events:build events:publishToMavenLocal -b billing/payment/build.gradle
 gradle events:build events:publishToMavenLocal -b sales/order/build.gradle
 gradle events:build events:publishToMavenLocal -b shipping/delivery/build.gradle
 gradle events:build events:publishToMavenLocal -b shipping/dispatching/build.gradle
 gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
+```
 
+Afterwards, build and publish the service:
+``` 
 gradle build publishToMavenLocal -b sales/catalog/build.gradle 
 gradle build publishToMavenLocal -b sales/order/build.gradle 
 gradle build publishToMavenLocal -b sales/cart/build.gradle 
@@ -91,8 +99,14 @@ gradle build publishToMavenLocal -b billing/payment/build.gradle
 gradle build publishToMavenLocal -b warehouse/build.gradle
 gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
 gradle build publishToMavenLocal -b shipping/delivery/build.gradle
+```
 
+Build the portal:
+```
 gradle build publishToMavenLocal -b portal/build.gradle
+```
 
+Run the monolithic application:
+```
 gradle test bootRun -b application/build.gradle
 ```
