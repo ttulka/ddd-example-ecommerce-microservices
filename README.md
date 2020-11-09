@@ -17,8 +17,8 @@ Planed work:
 
 - External messaging with Redis :white_check_mark:
 - External database PostgreSQL :white_check_mark:
-- Maven to Gradle migration
-- Services to microservices with Spring Boot
+- Maven to Gradle migration :white_check_mark:
+- Services to microservices with Spring Boot :white_check_mark:
 - Microservices as Docker images
 - Docker-Compose for local development
 - Integration tests module
@@ -72,8 +72,6 @@ When the `postgres` profile is not active, the system will fall-back to use H2 a
 
 ## Gradle Build 
 
-IN PROGRESS
-
 Every microservice must be build separately.
 
 First, publish common dependencies:
@@ -81,7 +79,7 @@ First, publish common dependencies:
 gradle build publishToMavenLocal -b common/build.gradle
 ```
 
-Second, publish public APIs of services:
+Then, publish public APIs of services:
 ``` 
 gradle events:build events:publishToMavenLocal -b billing/payment/build.gradle
 gradle events:build events:publishToMavenLocal -b sales/order/build.gradle
@@ -92,13 +90,13 @@ gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
 
 Afterwards, build and publish the service:
 ``` 
-gradle build publishToMavenLocal -b sales/catalog/build.gradle 
+gradle build publishToMavenLocal -b sales/catalog/build.gradle
 gradle build publishToMavenLocal -b sales/order/build.gradle 
 gradle build publishToMavenLocal -b sales/cart/build.gradle 
 gradle build publishToMavenLocal -b billing/payment/build.gradle
 gradle build publishToMavenLocal -b warehouse/build.gradle
-gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
 gradle build publishToMavenLocal -b shipping/delivery/build.gradle
+gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
 ```
 
 Build the portal:
@@ -110,3 +108,13 @@ Run the monolithic application:
 ```
 gradle test bootRun -b application/build.gradle
 ```
+
+Alternatively, start as a set of microservices:
+```
+gradle application:build application:bootRun -b sales/catalog/build.gradle
+gradle application:build application:bootRun -b sales/order/build.gradle
+gradle application:build application:bootRun -b sales/cart/build.gradle
+gradle application:build application:bootRun -b warehouse/build.gradle
+gradle application:build application:bootRun -b shipping/delivery/build.gradle
+gradle application:build application:bootRun -b shipping/dispatching/build.gradle
+``` 

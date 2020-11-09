@@ -2,3 +2,4 @@ rootProject.name = 'common'
 
 include 'events'
 include 'primitives'
+include 'application-integration-spring-boot-starter'
