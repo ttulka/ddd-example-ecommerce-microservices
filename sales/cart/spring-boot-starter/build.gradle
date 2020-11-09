@@ -1,6 +1,7 @@
 dependencies {
     api project(':jdbc')
     api project(':rest')
+    api project(':webcomp')
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }
