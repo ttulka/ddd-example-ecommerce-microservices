@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(':jdbc')
-    implementation project(':listeners')
+    api project(':jdbc')
+    api project(':listeners')
 
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 }

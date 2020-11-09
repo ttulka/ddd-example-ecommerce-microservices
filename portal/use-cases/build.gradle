@@ -1,8 +1,0 @@
-dependencies {
-    api 'com.ttulka.ecommerce.sales:order-domain:2.0-SNAPSHOT'
-    api 'com.ttulka.ecommerce.sales:cart-domain:2.0-SNAPSHOT'
-    api 'com.ttulka.ecommerce.shipping:delivery-domain:2.0-SNAPSHOT'
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-}

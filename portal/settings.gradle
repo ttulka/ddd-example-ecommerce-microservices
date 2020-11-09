@@ -1,5 +1,4 @@
 rootProject.name = 'portal'
 
-include 'use-cases'
 include 'web'
 include 'spring-boot-starter'

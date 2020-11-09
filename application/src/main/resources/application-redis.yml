@@ -1,3 +1,0 @@
-spring:
-  redis:
-    timeout: 1s

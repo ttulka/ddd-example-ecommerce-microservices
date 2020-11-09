@@ -7,9 +7,9 @@ Programming language is Java 11 with heavy use of Spring framework, Docker and K
 
 ## Purpose of the Project
 
-This repository focuces mostly on cross-cutting, infrastructure and deployment concerns. 
+This repository focuses mostly on cross-cutting, infrastructure and deployment concerns. 
 
-For domain and application concepts see [the original repository](https://github.com/ttulka/ddd-example-ecommerce). 
+For the domain and application concepts see the [original repository](https://github.com/ttulka/ddd-example-ecommerce). 
 
 ## !!! WORK IN PROGRESS !!!
 
@@ -91,8 +91,8 @@ gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
 Afterwards, build and publish the service:
 ``` 
 gradle build publishToMavenLocal -b sales/catalog/build.gradle
-gradle build publishToMavenLocal -b sales/order/build.gradle 
 gradle build publishToMavenLocal -b sales/cart/build.gradle 
+gradle build publishToMavenLocal -b sales/order/build.gradle 
 gradle build publishToMavenLocal -b billing/payment/build.gradle
 gradle build publishToMavenLocal -b warehouse/build.gradle
 gradle build publishToMavenLocal -b shipping/delivery/build.gradle
@@ -111,10 +111,10 @@ gradle test bootRun -b application/build.gradle
 
 Alternatively, start as a set of microservices:
 ```
-gradle application:build application:bootRun -b sales/catalog/build.gradle
-gradle application:build application:bootRun -b sales/order/build.gradle
-gradle application:build application:bootRun -b sales/cart/build.gradle
-gradle application:build application:bootRun -b warehouse/build.gradle
-gradle application:build application:bootRun -b shipping/delivery/build.gradle
-gradle application:build application:bootRun -b shipping/dispatching/build.gradle
+gradle application:bootRun -b sales/catalog/build.gradle
+gradle application:bootRun -b sales/order/build.gradle
+gradle application:bootRun -b sales/cart/build.gradle
+gradle application:bootRun -b warehouse/build.gradle
+gradle application:bootRun -b shipping/delivery/build.gradle
+gradle application:bootRun -b shipping/dispatching/build.gradle
 ``` 

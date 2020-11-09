@@ -3,11 +3,10 @@ package com.ttulka.ecommerce;
 import java.util.Map;
 
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import io.restassured.filter.cookie.CookieFilter;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 
 import static io.restassured.RestAssured.with;
@@ -21,27 +20,36 @@ abstract class OrderWorkFlow {
 
     @Test
     void order_is_shipped() throws Exception {
-        CookieFilter cookieFilter = new CookieFilter(); // share cookies among requests
-
-        with() // add an cart item
-                .filter(cookieFilter)
-                .port(port())
-                .basePath("/cart")
-                .param("productId", "1")
-                .param("title", "Prod 1")
-                .param("price", 1.f)
-                .param("quantity", 1)
-                .post()
-                .andReturn();
-
-        with() // place an order
-                .filter(cookieFilter)
+        with() // place order
                 .port(port())
                 .basePath("/order")
-                .formParam("name", "Test Name")
-                .formParam("address", "Test Address 123")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-1\"," +
+                      "\"total\": 123.5," +
+                      "\"items\": [{" +
+                      "\"productId\": \"p-1\"," +
+                      "\"quantity\": 5" +
+                      "}]" +
+                      "}")
                 .post()
-                .andReturn();
+                .andReturn()
+                .then()
+                .statusCode(201);
+
+        with() // prepare delivery
+                .port(port())
+                .basePath("/delivery")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-1\"," +
+                      "\"name\": \"Test Name\"," +
+                      "\"address\": \"Test Address 123\"" +
+                      "}")
+                .post()
+                .andReturn()
+                .then()
+                .statusCode(201);
 
         // delivery is dispatched
 
@@ -54,12 +62,12 @@ abstract class OrderWorkFlow {
                 .andReturn()
                 .jsonPath().getMap("[0]").get("orderId");
 
-        assertThat(orderId).isNotNull().as("No delivery found for a new order.");
+        assertThat(orderId).isEqualTo("order-1").as("No delivery found for a new order.");
 
         JsonPath deliveryJson = with().log().ifValidationFails()
                 .port(port())
-                .basePath("/delivery/order")
-                .get(orderId.toString())
+                .basePath("/delivery")
+                .get("/order/order-1")
                 .andReturn()
                 .jsonPath();
 
@@ -71,27 +79,36 @@ abstract class OrderWorkFlow {
 
     @Test
     void dispatched_items_are_removed_from_stock() throws Exception {
-        CookieFilter cookieFilter = new CookieFilter(); // share cookies among requests
-
-        with() // add an cart item
-                .filter(cookieFilter)
-                .port(port())
-                .basePath("/cart")
-                .param("productId", "3")
-                .param("title", "Prod 3")
-                .param("price", 3.f)
-                .param("quantity", 3)
-                .post()
-                .andReturn();
-
-        with() // place an order
-                .filter(cookieFilter)
+        with() // place order
                 .port(port())
                 .basePath("/order")
-                .formParam("name", "Test Name")
-                .formParam("address", "Test Address 123")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-2\"," +
+                      "\"total\": 123.5," +
+                      "\"items\": [{" +
+                      "\"productId\": \"p-2\"," +
+                      "\"quantity\": 123" +
+                      "}]" +
+                      "}")
                 .post()
-                .andReturn();
+                .andReturn()
+                .then()
+                .statusCode(201);
+
+        with() // prepare delivery
+                .port(port())
+                .basePath("/delivery")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-2\"," +
+                      "\"name\": \"Test Name\"," +
+                      "\"address\": \"Test Address 123\"" +
+                      "}")
+                .post()
+                .andReturn()
+                .then()
+                .statusCode(201);
 
         Thread.sleep(120);  // wait for all message to come
 
@@ -99,37 +116,45 @@ abstract class OrderWorkFlow {
         String leftInStock = with().log().ifValidationFails()
                 .port(port())
                 .basePath("/warehouse/stock")
-                .get("3")
+                .get("p-2")
                 .andReturn()
                 .body().print();
 
-        assertThat(leftInStock).isEqualTo(String.valueOf(13 - 3)).as("Items are not removed from the stock.");
+        assertThat(leftInStock).isEqualTo(String.valueOf(1000 - 123)).as("Items are not removed from the stock.");
     }
 
     @Test
-    @Order(1) // this must run first as there is no method to get payments for an order
     void payment_for_an_order_is_collected() throws Exception {
-        CookieFilter cookieFilter = new CookieFilter(); // share cookies among requests
-
-        with() // add an cart item
-                .filter(cookieFilter)
-                .port(port())
-                .basePath("/cart")
-                .param("productId", "2")
-                .param("title", "Prod 2")
-                .param("price", 2.50f)
-                .param("quantity", 2)
-                .post()
-                .andReturn();
-
-        with() // place an order
-                .filter(cookieFilter)
+        with() // place order
                 .port(port())
                 .basePath("/order")
-                .formParam("name", "Test Name")
-                .formParam("address", "Test Address 123")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-3\"," +
+                      "\"total\": 123.5," +
+                      "\"items\": [{" +
+                      "\"productId\": \"p-3\"," +
+                      "\"quantity\": 5" +
+                      "}]" +
+                      "}")
                 .post()
-                .andReturn();
+                .andReturn()
+                .then()
+                .statusCode(201);
+
+        with() // prepare delivery
+                .port(port())
+                .basePath("/delivery")
+                .contentType(ContentType.JSON)
+                .body("{" +
+                      "\"orderId\": \"order-3\"," +
+                      "\"name\": \"Test Name\"," +
+                      "\"address\": \"Test Address 123\"" +
+                      "}")
+                .post()
+                .andReturn()
+                .then()
+                .statusCode(201);
 
         Thread.sleep(120);  // wait for all message to come
 
@@ -144,6 +169,6 @@ abstract class OrderWorkFlow {
 
         assertAll(
                 () -> assertThat(payment.get("collected")).isEqualTo(true).as("Payment is not collected."),
-                () -> assertThat(payment.get("total")).isEqualTo(2 * 2.50f).as("Payment does not match."));
+                () -> assertThat(payment.get("total")).isEqualTo(123.5f).as("Payment does not match."));
     }
 }

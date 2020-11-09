@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: secret
-    initialization-mode: always
-    hikari:
-      connection-timeout: 5000
-      maximum-pool-size: 5
