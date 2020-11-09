@@ -19,6 +19,7 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -106,7 +107,7 @@ public class MessagingConfig {
 
         // listens to Spring application events, re-publishes as Redis messages
         // this is important to make the events work in transactional manner
-        @Configuration // TODO component?
+        @Component
         @RequiredArgsConstructor
         static class ApplicationEventsListenerAdapter {
 

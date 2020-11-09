@@ -5,7 +5,6 @@ plugins {
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'maven-publish'
     apply plugin: 'io.spring.dependency-management'
 
     group = 'com.ttulka.ecommerce.sales'
@@ -40,17 +39,21 @@ subprojects {
         useJUnitPlatform()
     }
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = rootProject.name + '-' + project.name
-                from components.java
-                versionMapping {
-                    usage('java-api') {
-                        fromResolutionOf('runtimeClasspath')
-                    }
-                    usage('java-runtime') {
-                        fromResolutionResult()
+    if (project.name != 'application') {
+        apply plugin: 'maven-publish'
+
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    artifactId = rootProject.name + '-' + project.name
+                    from components.java
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
+                        }
+                        usage('java-runtime') {
+                            fromResolutionResult()
+                        }
                     }
                 }
             }

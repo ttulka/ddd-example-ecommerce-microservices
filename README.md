@@ -37,7 +37,7 @@ docker run --rm --name redis-broker -p 6379:6379 -d redis:6 redis-server
 Start the application with Spring profile `redis`:
 
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=redis
+gradle bootRun --args='--spring.profiles.active=redis' -b application/build.gradle
 ```
 
 When the `redis` profile is not active, the system will fall-back to use of Spring application events as the default messaging mechanism.
@@ -65,7 +65,7 @@ docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret -d post
 Start the application with Spring profile `postgres`:
 
 ```
-mvn spring-boot:run -Dspring-boot.run.profiles=postgres
+gradle bootRun --args='--spring.profiles.active=postgres' -b application/build.gradle
 ```
 
 When the `postgres` profile is not active, the system will fall-back to use H2 as the default database.
