@@ -1,5 +1,3 @@
-apply plugin: 'org.springframework.boot'
-
 dependencies {
     implementation project(':spring-boot-starter')
 
@@ -10,4 +8,14 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
+}
+
+apply plugin: 'org.springframework.boot'
+
+javadocJar {
+    enabled = false
+}
+
+sourcesJar {
+    enabled = false
 }

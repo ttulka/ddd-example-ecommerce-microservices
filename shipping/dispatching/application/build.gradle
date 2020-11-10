@@ -11,3 +11,11 @@ dependencies {
 }
 
 apply plugin: 'org.springframework.boot'
+
+javadocJar {
+    enabled = false
+}
+
+sourcesJar {
+    enabled = false
+}
