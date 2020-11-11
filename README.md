@@ -21,6 +21,7 @@ Planed work:
 - Services to microservices with Spring Boot :white_check_mark:
 - Microservices as Docker images :white_check_mark:
 - Docker-Compose for local development :white_check_mark:
+- API Gateway with a reverse proxy
 - Integration tests module
 - Kubernetes cluster
 - Monitoring
@@ -97,6 +98,7 @@ gradle build publishToMavenLocal -b billing/payment/build.gradle
 gradle build publishToMavenLocal -b shipping/delivery/build.gradle
 gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
 gradle build publishToMavenLocal -b warehouse/build.gradle
+gradle build publishToMavenLocal -b portal/build.gradle
 ```
 
 Build the portal:
@@ -118,6 +120,7 @@ gradle application:bootRun -b billing/payment/build.gradle
 gradle application:bootRun -b shipping/delivery/build.gradle
 gradle application:bootRun -b shipping/dispatching/build.gradle
 gradle application:bootRun -b warehouse/build.gradle
+gradle application:bootRun -b portal/build.gradle
 ``` 
 
 ## Docker Containers
@@ -131,6 +134,7 @@ docker build -t ttulka/ecommerce-payment-service billing/payment/application
 docker build -t ttulka/ecommerce-delivery-service shipping/delivery/application
 docker build -t ttulka/ecommerce-dispatching-service shipping/dispatching/application
 docker build -t ttulka/ecommerce-warehouse-service warehouse/application
+docker build -t ttulka/ecommerce-portal-service portal/application
 ```
 
 Alternatively, the same can be achieved via Gradle:
@@ -142,6 +146,7 @@ gradle application:bootBuildImage --imageName=ttulka/ecommerce-payment-service -
 gradle application:bootBuildImage --imageName=ttulka/ecommerce-delivery-service -b shipping/delivery/build.gradle
 gradle application:bootBuildImage --imageName=ttulka/ecommerce-dispatching-service -b shipping/dispatching/build.gradle
 gradle application:bootBuildImage --imageName=ttulka/ecommerce-warehouse-service -b warehouse/build.gradle
+gradle application:bootBuildImage --imageName=ttulka/ecommerce-portal-service -b portal/build.gradle
 ```
 
 Run the containers:
@@ -153,6 +158,7 @@ docker container run --rm -p 8080:8004 ttulka/ecommerce-payment-service
 docker container run --rm -p 8080:8005 ttulka/ecommerce-delivery-service
 docker container run --rm -p 8080:8006 ttulka/ecommerce-dispatching-service
 docker container run --rm -p 8080:8007 ttulka/ecommerce-warehouse-service
+docker container run --rm -p 8080:8080 ttulka/ecommerce-portal
 ```
 
 Active profiles can be set as follows:
@@ -200,3 +206,8 @@ INSERT INTO products_in_stock VALUES
     ('6', 1);
 ```
 
+The NGINX reverse proxy creates an API gateway:
+```
+curl localhost:8080/catalog/products
+curl localhost:8080/warehouse/stock/5
+```

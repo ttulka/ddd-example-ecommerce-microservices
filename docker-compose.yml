@@ -21,6 +21,33 @@ services:
     ports:
     - 5432:5432
 
+  reverseproxy:
+    image: nginx:stable-alpine
+    volumes:
+    - ${NGINX_CONFIG:-./reverseproxy}:/etc/nginx/conf.d:ro
+    ports:
+    - ${PORT:-8080}:80
+    depends_on:
+    - portal
+    - catalog
+    - order
+    - cart
+    - payment
+    - delivery
+    - dispatching
+    - warehouse
+
+  portal:
+    image: ttulka/ecommerce-portal-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    depends_on:
+    - redis
+    - postgres
+
   catalog:
     image: ttulka/ecommerce-catalog-service
     environment:
@@ -28,8 +55,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${CATALOG_SERVICE_PORT:-8001}:8080
     depends_on:
     - redis
     - postgres
@@ -41,8 +66,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${ORDER_SERVICE_PORT:-8002}:8080
     depends_on:
     - redis
     - postgres
@@ -54,8 +77,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${CART_SERVICE_PORT:-8003}:8080
     depends_on:
     - redis
     - postgres
@@ -67,8 +88,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${PAYMENT_SERVICE_PORT:-8004}:8080
     depends_on:
     - redis
     - postgres
@@ -80,8 +99,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${DELIVERY_SERVICE_PORT:-8005}:8080
     depends_on:
     - redis
     - postgres
@@ -93,8 +110,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${DISPATCHING_SERVICE_PORT:-8006}:8080
     depends_on:
     - redis
     - postgres
@@ -106,8 +121,6 @@ services:
       ECOMMERCE_BROKER_HOST: redis
       ECOMMERCE_DATABASE_HOST: postgres
       ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
-    ports:
-    - ${WAREHOUSE_SERVICE_PORT:-8007}:8080
     depends_on:
     - redis
     - postgres

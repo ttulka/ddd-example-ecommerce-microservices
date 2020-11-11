@@ -18,6 +18,7 @@ import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,7 +102,13 @@ public class MessagingConfig {
             @Transactional // important due to transactional listeners
             @Override
             public void onMessage(Message message, byte[] pattern) {
-                publisher.publishEvent(serializer.deserialize(message.getBody()));
+                try {
+                    publisher.publishEvent(serializer.deserialize(message.getBody()));
+                } catch (SerializationException ignore) {
+                    // because a single topic is used for all events,
+                    // this happens when an event comes the service is not interested in
+                    // TODO better would be for a service to subscribe to a particular topic or topics
+                }
             }
         }
 
