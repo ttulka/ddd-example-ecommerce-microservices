@@ -20,7 +20,7 @@ Planed work:
 - Maven to Gradle migration :white_check_mark:
 - Services to microservices with Spring Boot :white_check_mark:
 - Microservices as Docker images :white_check_mark:
-- Docker-Compose for local development
+- Docker-Compose for local development :white_check_mark:
 - Integration tests module
 - Kubernetes cluster
 - Monitoring
@@ -159,3 +159,44 @@ Active profiles can be set as follows:
 ```
 docker container run --rm -e "SPRING_PROFILES_ACTIVE=redis,postgres" -p 8080:8001 ttulka/ecommerce-catalog-service
 ```
+
+### Docker-Compose
+
+```
+docker-compose up
+```
+
+Access the Postgres database and init some data:
+```
+docker exec -it <containerID> psql -U postgres postgres
+
+INSERT INTO categories VALUES
+    ('1', 'books', 'books'),
+    ('2', 'games-toys', 'games and toys'),
+    ('3', 'others', 'others');
+
+INSERT INTO products VALUES
+    ('1', 'Domain-Driven Design', 'by Eric Evans', 45.00),
+    ('2', 'Object Thinking', 'by David West', 35.00),
+    ('3', 'Release It!', 'by Michael Nygard', 32.50),
+    ('4', 'Chess', 'Deluxe edition of the classic game.', 3.20),
+    ('5', 'Domino', 'In black or white.', 1.50),
+    ('6', 'Klein bottle', 'Two-dimensional manifold made from glass.', 25.00);
+
+INSERT INTO products_in_categories VALUES
+    ('1', '1'),
+    ('2', '1'),
+    ('3', '1'),
+    ('4', '2'),
+    ('5', '2'),
+    ('6', '3');
+
+INSERT INTO products_in_stock VALUES
+    ('1', 5),
+    ('2', 0),
+    ('3', 13),
+    ('4', 55),
+    ('5', 102),
+    ('6', 1);
+```
+

@@ -1,0 +1,113 @@
+version: '3.7'
+
+volumes:
+  data:
+
+services:
+
+  redis:
+    image: redis:${REDIS_VERSION:-6}
+    command:
+    - redis-server
+#    ports:
+#    - 6379:6379
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-13}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    volumes:
+    - ${POSTGRES_DATA:-data}:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+
+  catalog:
+    image: ttulka/ecommerce-catalog-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${CATALOG_SERVICE_PORT:-8001}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  order:
+    image: ttulka/ecommerce-order-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${ORDER_SERVICE_PORT:-8002}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  cart:
+    image: ttulka/ecommerce-cart-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${CART_SERVICE_PORT:-8003}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  payment:
+    image: ttulka/ecommerce-payment-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${PAYMENT_SERVICE_PORT:-8004}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  delivery:
+    image: ttulka/ecommerce-delivery-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${DELIVERY_SERVICE_PORT:-8005}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  dispatching:
+    image: ttulka/ecommerce-dispatching-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${DISPATCHING_SERVICE_PORT:-8006}:8080
+    depends_on:
+    - redis
+    - postgres
+
+  warehouse:
+    image: ttulka/ecommerce-warehouse-service
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
+      ECOMMERCE_BROKER_HOST: redis
+      ECOMMERCE_DATABASE_HOST: postgres
+      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
+    ports:
+    - ${WAREHOUSE_SERVICE_PORT:-8007}:8080
+    depends_on:
+    - redis
+    - postgres

@@ -1,9 +1,20 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+ecommerce:
+  database:
+    host: localhost
+    port: 5432
+    dbname: postgres
+    url: jdbc:postgresql://${ecommerce.database.host}:${ecommerce.database.port}/${ecommerce.database.dbname}
     username: postgres
     password: secret
+    timeout: 5000
+    max-pool-size: 5
+
+spring:
+  datasource:
+    url: ${ecommerce.database.url}
+    username: ${ecommerce.database.username}
+    password: ${ecommerce.database.password}
     initialization-mode: always
     hikari:
-      connection-timeout: 5000
-      maximum-pool-size: 5
+      connection-timeout: ${ecommerce.database.timeout}
+      maximum-pool-size: ${ecommerce.database.max-pool-size}
