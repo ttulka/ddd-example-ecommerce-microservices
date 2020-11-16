@@ -22,7 +22,7 @@ Planed work:
 - Microservices as Docker images :white_check_mark:
 - Docker-Compose for local development :white_check_mark:
 - API Gateway with a reverse proxy :white_check_mark:
-- Kubernetes cluster
+- Kubernetes cluster :white_check_mark:
 - Integration tests module
 - Monitoring
 - Security
@@ -222,13 +222,29 @@ docker build -t ttulka/ecommerce-reverseproxy reverseproxy
 
 Create deployments:
 ```
-kubectl create -f 1-infrastructure.k8s.yml
-kubectl create -f 2-backend-services.k8s.yml
-kubectl create -f 3-frontend-portal.k8s.yml
-kubectl create -f 4-api-gateway.k8s.yml
+kubectl apply -f 1-infrastructure.k8s.yml
+kubectl apply -f 2-backend-services.k8s.yml
+kubectl apply -f 3-frontend-portal.k8s.yml
+kubectl apply -f 4-api-gateway.k8s.yml
 ```
 
 Set up ports forwarding to access the cluster from your local network:
 ```
 kubectl port-forward service/reverseproxy 8080:8080
 ```
+
+Alternatively, you can create an Ingress:
+```sh
+minikube addons enable ingress
+
+kubectl apply -f 5-ingress.k8s.yml
+
+# get the ingress address 
+kubectl get ingress ecommerce-ingress
+
+# add the address into hosts
+sudo cp /etc/hosts hosts.bak
+sudo echo -e '\n<ingress-address> ecommerce.local' >> /etc/hosts
+
+# access the application in browser: http://ecommerce.local
+``` 

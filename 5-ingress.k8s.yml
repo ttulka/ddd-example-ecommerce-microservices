@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ecommerce-ingress
+spec:
+  defaultBackend:
+    service:
+      name: reverseproxy
+      port:
+        number: 80
+  rules:
+  - host: ecommerce.local
