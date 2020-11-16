@@ -39,11 +39,6 @@ services:
 
   portal:
     image: ttulka/ecommerce-portal-service
-    environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES:-default,redis,postgres}
-      ECOMMERCE_BROKER_HOST: redis
-      ECOMMERCE_DATABASE_HOST: postgres
-      ECOMMERCE_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-secret}
     depends_on:
     - redis
     - postgres
