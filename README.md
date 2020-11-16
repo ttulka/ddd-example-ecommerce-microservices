@@ -21,9 +21,9 @@ Planed work:
 - Services to microservices with Spring Boot :white_check_mark:
 - Microservices as Docker images :white_check_mark:
 - Docker-Compose for local development :white_check_mark:
-- API Gateway with a reverse proxy
-- Integration tests module
+- API Gateway with a reverse proxy :white_check_mark:
 - Kubernetes cluster
+- Integration tests module
 - Monitoring
 - Security
 
@@ -92,8 +92,8 @@ gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
 Afterwards, build and publish the service:
 ``` 
 gradle build publishToMavenLocal -b sales/catalog/build.gradle
-gradle build publishToMavenLocal -b sales/cart/build.gradle 
 gradle build publishToMavenLocal -b sales/order/build.gradle 
+gradle build publishToMavenLocal -b sales/cart/build.gradle 
 gradle build publishToMavenLocal -b billing/payment/build.gradle
 gradle build publishToMavenLocal -b shipping/delivery/build.gradle
 gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
@@ -125,19 +125,7 @@ gradle application:bootRun -b portal/build.gradle
 
 ## Docker Containers
 
-Build an image per microservice:
-```
-docker build -t ttulka/ecommerce-catalog-service sales/catalog/application
-docker build -t ttulka/ecommerce-order-service sales/order/application
-docker build -t ttulka/ecommerce-cart-service sales/cart/application
-docker build -t ttulka/ecommerce-payment-service billing/payment/application
-docker build -t ttulka/ecommerce-delivery-service shipping/delivery/application
-docker build -t ttulka/ecommerce-dispatching-service shipping/dispatching/application
-docker build -t ttulka/ecommerce-warehouse-service warehouse/application
-docker build -t ttulka/ecommerce-portal-service portal/application
-```
-
-Alternatively, the same can be achieved via Gradle:
+Build an image per microservice via Gradle:
 ```
 gradle application:bootBuildImage --imageName=ttulka/ecommerce-catalog-service -b sales/catalog/build.gradle
 gradle application:bootBuildImage --imageName=ttulka/ecommerce-order-service -b sales/order/build.gradle
@@ -158,7 +146,7 @@ docker container run --rm -p 8080:8004 ttulka/ecommerce-payment-service
 docker container run --rm -p 8080:8005 ttulka/ecommerce-delivery-service
 docker container run --rm -p 8080:8006 ttulka/ecommerce-dispatching-service
 docker container run --rm -p 8080:8007 ttulka/ecommerce-warehouse-service
-docker container run --rm -p 8080:8080 ttulka/ecommerce-portal
+docker container run --rm -p 8080:8000 ttulka/ecommerce-portal
 ```
 
 Active profiles can be set as follows:
@@ -210,4 +198,37 @@ The NGINX reverse proxy creates an API gateway:
 ```
 curl localhost:8080/catalog/products
 curl localhost:8080/warehouse/stock/5
+```
+
+## Kubernetes
+
+To use local images for development with Minikube, run the following command to use local Docker images registry:
+```
+eval $(minikube docker-env)
+```
+
+Afterwards, build the docker image with the Minikube's Docker daemon:
+```
+docker build -t ttulka/ecommerce-catalog-service sales/catalog/application
+docker build -t ttulka/ecommerce-order-service sales/order/application
+docker build -t ttulka/ecommerce-cart-service sales/cart/application
+docker build -t ttulka/ecommerce-payment-service billing/payment/application
+docker build -t ttulka/ecommerce-delivery-service shipping/delivery/application
+docker build -t ttulka/ecommerce-dispatching-service shipping/dispatching/application
+docker build -t ttulka/ecommerce-warehouse-service warehouse/application
+docker build -t ttulka/ecommerce-portal-service portal/application
+docker build -t ttulka/ecommerce-reverseproxy reverseproxy
+```
+
+Create deployments:
+```
+kubectl create -f 1-infrastructure.k8s.yml
+kubectl create -f 2-backend-services.k8s.yml
+kubectl create -f 3-frontend-portal.k8s.yml
+kubectl create -f 4-api-gateway.k8s.yml
+```
+
+Set up ports forwarding to access the cluster from your local network:
+```
+kubectl port-forward service/reverseproxy 8080:8080
 ```

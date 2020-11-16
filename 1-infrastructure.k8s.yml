@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    name: redis
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: redis
+      type: service
+  template:
+    metadata:
+      labels:
+        name: redis
+        type: service
+    spec:
+      containers:
+        - name: redis
+          image: redis:6
+          ports:
+            - containerPort: 6379
+              name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    name: redis
+    type: api
+spec:
+  selector:
+    name: redis
+    type: service
+  ports:
+    - port: 6379
+      name: redis-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    name: postgres
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: postgres
+      type: service
+  template:
+    metadata:
+      labels:
+        name: postgres
+        type: service
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          ports:
+            - containerPort: 5432
+              name: redis
+          env:
+            - name: POSTGRES_PASSWORD
+              value: secret
+          volumeMounts:
+          - name: db-data
+            mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: db-data
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  labels:
+    name: postgres
+    type: api
+spec:
+  selector:
+    name: postgres
+    type: service
+  ports:
+  - port: 5432
+    name: postgres-api
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100M

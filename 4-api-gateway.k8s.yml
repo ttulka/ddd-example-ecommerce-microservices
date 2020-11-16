@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverseproxy
+  labels:
+    name: reverseproxy
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: reverseproxy
+      type: service
+  template:
+    metadata:
+      labels:
+        name: reverseproxy
+        type: service
+    spec:
+      containers:
+      - name: reverseproxy
+        image: ttulka/ecommerce-reverseproxy
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: reverseproxy
+          containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reverseproxy
+  labels:
+    name: reverseproxy
+    type: api
+spec:
+  type: NodePort
+  selector:
+    name: reverseproxy
+    type: service
+  ports:
+  - port: 8080
+    targetPort: 80
+    name: reverseproxy-api

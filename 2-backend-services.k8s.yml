@@ -1,0 +1,362 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  labels:
+    name: catalog
+    type: deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: catalog
+      type: service
+  template:
+    metadata:
+      labels:
+        name: catalog
+        type: service
+    spec:
+      containers:
+      - name: catalog
+        image: ttulka/ecommerce-catalog-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: catalog
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  labels:
+    name: catalog
+    type: api
+spec:
+  selector:
+    name: catalog
+    type: service
+  ports:
+  - port: 8080
+    name: catalog-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order
+  labels:
+    name: order
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: order
+      type: service
+  template:
+    metadata:
+      labels:
+        name: order
+        type: service
+    spec:
+      containers:
+      - name: order
+        image: ttulka/ecommerce-order-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: order
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order
+  labels:
+    name: order
+    type: api
+spec:
+  selector:
+    name: order
+    type: service
+  ports:
+  - port: 8080
+    name: order-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart
+  labels:
+    name: cart
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cart
+      type: service
+  template:
+    metadata:
+      labels:
+        name: cart
+        type: service
+    spec:
+      containers:
+      - name: cart
+        image: ttulka/ecommerce-cart-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: cart
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  labels:
+    name: cart
+    type: api
+spec:
+  selector:
+    name: cart
+    type: service
+  ports:
+  - port: 8080
+    name: cart-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+  labels:
+    name: payment
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: payment
+      type: service
+  template:
+    metadata:
+      labels:
+        name: payment
+        type: service
+    spec:
+      containers:
+      - name: payment
+        image: ttulka/ecommerce-payment-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: payment
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+  labels:
+    name: payment
+    type: api
+spec:
+  selector:
+    name: payment
+    type: service
+  ports:
+  - port: 8080
+    name: payment-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery
+  labels:
+    name: delivery
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: delivery
+      type: service
+  template:
+    metadata:
+      labels:
+        name: delivery
+        type: service
+    spec:
+      containers:
+      - name: delivery
+        image: ttulka/ecommerce-delivery-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: delivery
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery
+  labels:
+    name: delivery
+    type: api
+spec:
+  selector:
+    name: delivery
+    type: service
+  ports:
+  - port: 8080
+    name: delivery-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatching
+  labels:
+    name: dispatching
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: dispatching
+      type: service
+  template:
+    metadata:
+      labels:
+        name: dispatching
+        type: service
+    spec:
+      containers:
+      - name: dispatching
+        image: ttulka/ecommerce-dispatching-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: dispatching
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dispatching
+  labels:
+    name: dispatching
+    type: api
+spec:
+  selector:
+    name: dispatching
+    type: service
+  ports:
+  - port: 8080
+    name: dispatching-api
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse
+  labels:
+    name: warehouse
+    type: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: warehouse
+      type: service
+  template:
+    metadata:
+      labels:
+        name: warehouse
+        type: service
+    spec:
+      containers:
+      - name: warehouse
+        image: ttulka/ecommerce-warehouse-service
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: warehouse
+          containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: default,redis,postgres
+        - name: ECOMMERCE_BROKER_HOST
+          value: redis
+        - name: ECOMMERCE_DATABASE_HOST
+          value: postgres
+        - name: ECOMMERCE_DATABASE_PASSWORD
+          value: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: warehouse
+  labels:
+    name: warehouse
+    type: api
+spec:
+  selector:
+    name: warehouse
+    type: service
+  ports:
+  - port: 8080
+    name: warehouse-api

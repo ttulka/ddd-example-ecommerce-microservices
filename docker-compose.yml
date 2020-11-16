@@ -22,9 +22,7 @@ services:
     - 5432:5432
 
   reverseproxy:
-    image: nginx:stable-alpine
-    volumes:
-    - ${NGINX_CONFIG:-./reverseproxy}:/etc/nginx/conf.d:ro
+    image: ttulka/ecommerce-reverseproxy
     ports:
     - ${PORT:-8080}:80
     depends_on:
