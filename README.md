@@ -11,22 +11,6 @@ This repository focuses mostly on cross-cutting, infrastructure and deployment c
 
 For the domain and application concepts see the [original repository](https://github.com/ttulka/ddd-example-ecommerce). 
 
-## !!! WORK IN PROGRESS !!!
-
-Planed work:
-
-- External messaging with Redis :white_check_mark:
-- External database PostgreSQL :white_check_mark:
-- Maven to Gradle migration :white_check_mark:
-- Services to microservices with Spring Boot :white_check_mark:
-- Microservices as Docker images :white_check_mark:
-- Docker-Compose for local development :white_check_mark:
-- API Gateway with a reverse proxy :white_check_mark:
-- Kubernetes cluster :white_check_mark:
-- Integration tests module
-- Monitoring
-- Security
-
 ## Message Broker
 
 As the message broker a simple **Redis** instance could be used:
@@ -82,23 +66,23 @@ gradle build publishToMavenLocal -b common/build.gradle
 
 Then, publish public APIs of services:
 ``` 
-gradle events:build events:publishToMavenLocal -b billing/payment/build.gradle
-gradle events:build events:publishToMavenLocal -b sales/order/build.gradle
-gradle events:build events:publishToMavenLocal -b shipping/delivery/build.gradle
-gradle events:build events:publishToMavenLocal -b shipping/dispatching/build.gradle
-gradle events:build events:publishToMavenLocal -b warehouse/build.gradle
+gradle events:publishToMavenLocal -b billing/payment/build.gradle
+gradle events:publishToMavenLocal -b sales/order/build.gradle
+gradle events:publishToMavenLocal -b shipping/delivery/build.gradle
+gradle events:publishToMavenLocal -b shipping/dispatching/build.gradle
+gradle events:publishToMavenLocal -b warehouse/build.gradle
 ```
 
 Afterwards, build and publish the service:
 ``` 
-gradle build publishToMavenLocal -b sales/catalog/build.gradle
-gradle build publishToMavenLocal -b sales/order/build.gradle 
-gradle build publishToMavenLocal -b sales/cart/build.gradle 
-gradle build publishToMavenLocal -b billing/payment/build.gradle
-gradle build publishToMavenLocal -b shipping/delivery/build.gradle
-gradle build publishToMavenLocal -b shipping/dispatching/build.gradle
-gradle build publishToMavenLocal -b warehouse/build.gradle
-gradle build publishToMavenLocal -b portal/build.gradle
+gradle publishToMavenLocal -b sales/catalog/build.gradle
+gradle publishToMavenLocal -b sales/order/build.gradle 
+gradle publishToMavenLocal -b sales/cart/build.gradle 
+gradle publishToMavenLocal -b billing/payment/build.gradle
+gradle publishToMavenLocal -b shipping/delivery/build.gradle
+gradle publishToMavenLocal -b shipping/dispatching/build.gradle
+gradle publishToMavenLocal -b warehouse/build.gradle
+gradle publishToMavenLocal -b portal/build.gradle
 ```
 
 Build the portal:

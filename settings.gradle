@@ -1,1 +1,12 @@
 rootProject.name = 'ecommerce'
+
+includeBuild 'common'
+includeBuild 'portal'
+includeBuild 'application'
+includeBuild 'sales/catalog'
+includeBuild 'sales/cart'
+includeBuild 'sales/order'
+includeBuild 'billing/payment'
+includeBuild 'shipping/delivery'
+includeBuild 'shipping/dispatching'
+includeBuild 'warehouse'
