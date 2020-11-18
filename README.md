@@ -19,7 +19,9 @@ Run the monolithic application:
 
 ```sh
 gradle :application:bootRun
-``` 
+```
+
+To set up and run microservices, see the [Docker](#docker-containers) and [Kubernetes](#kubernetes) sections.
 
 ## Message Broker
 
@@ -116,33 +118,23 @@ docker exec -it <containerID> psql -U postgres postgres
 
 ```sql
 INSERT INTO categories VALUES
-    ('1', 'books', 'books'),
-    ('2', 'games-toys', 'games and toys'),
-    ('3', 'others', 'others');
+    ('C1', 'books', 'Books'),
+    ('C2', 'games', 'Games');
 
 INSERT INTO products VALUES
-    ('1', 'Domain-Driven Design', 'by Eric Evans', 45.00),
-    ('2', 'Object Thinking', 'by David West', 35.00),
-    ('3', 'Release It!', 'by Michael Nygard', 32.50),
-    ('4', 'Chess', 'Deluxe edition of the classic game.', 3.20),
-    ('5', 'Domino', 'In black or white.', 1.50),
-    ('6', 'Klein bottle', 'Two-dimensional manifold made from glass.', 25.00);
+    ('P1', 'Domain-Driven Design', 'by Eric Evans', 45.00),
+    ('P2', 'Object Thinking', 'by David West', 35.00),
+    ('P3', 'Chess', 'Classic game.', 3.20);
 
 INSERT INTO products_in_categories VALUES
-    ('1', '1'),
-    ('2', '1'),
-    ('3', '1'),
-    ('4', '2'),
-    ('5', '2'),
-    ('6', '3');
+    ('P1', 'C1'),
+    ('P2', 'C1'),
+    ('P3', 'C2');
 
 INSERT INTO products_in_stock VALUES
-    ('1', 5),
-    ('2', 0),
-    ('3', 13),
-    ('4', 55),
-    ('5', 102),
-    ('6', 1);
+    ('P1', 5),
+    ('P2', 0),
+    ('P3', 1);
 ```
 
 The NGINX reverse proxy serves as a simple API gateway:
