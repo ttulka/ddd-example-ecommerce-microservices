@@ -7,6 +7,8 @@ plugins {
 group = 'com.ttulka.ecommerce'
 version = '2.0-SNAPSHOT'
 
+description = 'Monolithic application assembling all service in a single process.'
+
 sourceCompatibility = 11
 targetCompatibility = 11
 
