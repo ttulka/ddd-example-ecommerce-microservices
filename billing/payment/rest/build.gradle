@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':domain')
+    implementation project(':billing:payment:payment-domain')
 
     implementation 'org.springframework:spring-web'
 

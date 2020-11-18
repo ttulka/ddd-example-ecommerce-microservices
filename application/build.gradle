@@ -11,19 +11,20 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 dependencies {
-    implementation 'com.ttulka.ecommerce.sales:catalog-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.sales:cart-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.sales:order-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.warehouse:warehouse-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.billing:payment-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.shipping:delivery-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.shipping:dispatching-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.portal:portal-spring-boot-starter:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.common:common-events:2.0-SNAPSHOT'
+    implementation project(':sales:catalog:catalog-spring-boot-starter')
+    implementation project(':sales:cart:cart-spring-boot-starter')
+    implementation project(':sales:order:order-spring-boot-starter')
+    implementation project(':warehouse:warehouse-spring-boot-starter')
+    implementation project(':billing:payment:payment-spring-boot-starter')
+    implementation project(':shipping:delivery:delivery-spring-boot-starter')
+    implementation project(':shipping:dispatching:dispatching-spring-boot-starter')
+    implementation project(':portal:portal-spring-boot-starter')
+    implementation project(':common:application-integration-spring-boot-starter')
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.h2database:h2'
     implementation 'org.postgresql:postgresql'
 
@@ -43,4 +44,8 @@ repositories {
 test {
     useJUnitPlatform()
     include '**/**Test.class'
+}
+
+bootBuildImage {
+    enabled = false
 }

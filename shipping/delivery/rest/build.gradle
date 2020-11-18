@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':domain')
+    implementation project(':shipping:delivery:delivery-domain')
 
     implementation 'org.springframework:spring-web'
 

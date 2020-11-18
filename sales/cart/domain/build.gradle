@@ -1,5 +1,5 @@
 dependencies {
-    api 'com.ttulka.ecommerce.common:common-primitives:2.0-SNAPSHOT'
+    api project(':common:primitives')
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

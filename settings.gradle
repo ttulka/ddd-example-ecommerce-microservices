@@ -1,12 +1,120 @@
 rootProject.name = 'ecommerce'
 
-includeBuild 'common'
-includeBuild 'portal'
-includeBuild 'application'
-includeBuild 'sales/catalog'
-includeBuild 'sales/cart'
-includeBuild 'sales/order'
-includeBuild 'billing/payment'
-includeBuild 'shipping/delivery'
-includeBuild 'shipping/dispatching'
-includeBuild 'warehouse'
+include(':common')
+include(':common:primitives')
+include(':common:events')
+include(':common:application-integration-spring-boot-starter')
+
+include(':portal')
+include(':portal:web')
+include(':portal:spring-boot-starter')
+include(':portal:application')
+
+include(':application')
+
+include(':sales:catalog')
+include(':sales:catalog:domain')
+include(':sales:catalog:jdbc')
+include(':sales:catalog:rest')
+include(':sales:catalog:webcomp')
+include(':sales:catalog:spring-boot-starter')
+include(':sales:catalog:application')
+include(':sales:cart')
+include(':sales:cart:domain')
+include(':sales:cart:jdbc')
+include(':sales:cart:rest')
+include(':sales:cart:webcomp')
+include(':sales:cart:spring-boot-starter')
+include(':sales:cart:application')
+include(':sales:order')
+include(':sales:order:domain')
+include(':sales:order:events')
+include(':sales:order:jdbc')
+include(':sales:order:rest')
+include(':sales:order:webcomp')
+include(':sales:order:spring-boot-starter')
+include(':sales:order:application')
+include(':billing:payment')
+include(':billing:payment:domain')
+include(':billing:payment:events')
+include(':billing:payment:jdbc')
+include(':billing:payment:listeners')
+include(':billing:payment:rest')
+include(':billing:payment:spring-boot-starter')
+include(':billing:payment:application')
+include(':shipping:delivery')
+include(':shipping:delivery:domain')
+include(':shipping:delivery:events')
+include(':shipping:delivery:jdbc')
+include(':shipping:delivery:listeners')
+include(':shipping:delivery:rest')
+include(':shipping:delivery:webcomp')
+include(':shipping:delivery:spring-boot-starter')
+include(':shipping:delivery:application')
+include(':shipping:dispatching')
+include(':shipping:dispatching:domain')
+include(':shipping:dispatching:events')
+include(':shipping:dispatching:jdbc')
+include(':shipping:dispatching:listeners')
+include(':shipping:dispatching:spring-boot-starter')
+include(':shipping:dispatching:application')
+include(':warehouse')
+include(':warehouse:domain')
+include(':warehouse:events')
+include(':warehouse:jdbc')
+include(':warehouse:listeners')
+include(':warehouse:rest')
+include(':warehouse:spring-boot-starter')
+include(':warehouse:application')
+
+// change names to avoid collisions in libs in the package JARs
+project(':portal:web').name = 'portal-web'
+project(':portal:spring-boot-starter').name = 'portal-spring-boot-starter'
+project(':portal:application').name = 'portal-application'
+project(':sales:catalog:domain').name = 'catalog-domain'
+project(':sales:catalog:jdbc').name = 'catalog-jdbc'
+project(':sales:catalog:rest').name = 'catalog-rest'
+project(':sales:catalog:webcomp').name = 'catalog-webcomp'
+project(':sales:catalog:spring-boot-starter').name = 'catalog-spring-boot-starter'
+project(':sales:catalog:application').name = 'catalog-application'
+project(':sales:cart:domain').name = 'cart-domain'
+project(':sales:cart:jdbc').name = 'cart-jdbc'
+project(':sales:cart:rest').name = 'cart-rest'
+project(':sales:cart:webcomp').name = 'cart-webcomp'
+project(':sales:cart:spring-boot-starter').name = 'cart-spring-boot-starter'
+project(':sales:cart:application').name = 'cart-application'
+project(':sales:order:domain').name = 'order-domain'
+project(':sales:order:events').name = 'order-events'
+project(':sales:order:jdbc').name = 'order-jdbc'
+project(':sales:order:rest').name = 'order-rest'
+project(':sales:order:webcomp').name = 'order-webcomp'
+project(':sales:order:spring-boot-starter').name = 'order-spring-boot-starter'
+project(':sales:order:application').name = 'order-application'
+project(':billing:payment:domain').name = 'payment-domain'
+project(':billing:payment:events').name = 'payment-events'
+project(':billing:payment:jdbc').name = 'payment-jdbc'
+project(':billing:payment:listeners').name = 'payment-listeners'
+project(':billing:payment:rest').name = 'payment-rest'
+project(':billing:payment:spring-boot-starter').name = 'payment-spring-boot-starter'
+project(':billing:payment:application').name = 'payment-application'
+project(':shipping:delivery:domain').name = 'delivery-domain'
+project(':shipping:delivery:events').name = 'delivery-events'
+project(':shipping:delivery:jdbc').name = 'delivery-jdbc'
+project(':shipping:delivery:listeners').name = 'delivery-listeners'
+project(':shipping:delivery:rest').name = 'delivery-rest'
+project(':shipping:delivery:webcomp').name = 'delivery-webcomp'
+project(':shipping:delivery:spring-boot-starter').name = 'delivery-spring-boot-starter'
+project(':shipping:delivery:application').name = 'delivery-application'
+project(':shipping:dispatching:domain').name = 'dispatching-domain'
+project(':shipping:dispatching:events').name = 'dispatching-events'
+project(':shipping:dispatching:jdbc').name = 'dispatching-jdbc'
+project(':shipping:dispatching:listeners').name = 'dispatching-listeners'
+project(':shipping:dispatching:spring-boot-starter').name = 'dispatching-spring-boot-starter'
+project(':shipping:dispatching:application').name = 'dispatching-application'
+project(':warehouse:domain').name = 'warehouse-domain'
+project(':warehouse:events').name = 'warehouse-events'
+project(':warehouse:jdbc').name = 'warehouse-jdbc'
+project(':warehouse:listeners').name = 'warehouse-listeners'
+project(':warehouse:rest').name = 'warehouse-rest'
+project(':warehouse:spring-boot-starter').name = 'warehouse-spring-boot-starter'
+project(':warehouse:application').name = 'warehouse-application'

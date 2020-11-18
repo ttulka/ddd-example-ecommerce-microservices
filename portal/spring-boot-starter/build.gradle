@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(':web')
+    api project(':portal:portal-web')
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    api 'org.springframework.boot:spring-boot-starter-web'
+    api 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }

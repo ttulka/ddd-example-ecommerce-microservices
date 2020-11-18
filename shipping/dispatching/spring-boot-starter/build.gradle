@@ -1,8 +1,8 @@
 dependencies {
-    api project(':jdbc')
-    api project(':listeners')
+    api project(':shipping:dispatching:dispatching-jdbc')
+    api project(':shipping:dispatching:dispatching-listeners')
 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    api 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 javadoc {

@@ -7,7 +7,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.ttulka.ecommerce.billing'
+    group = 'com.ttulka.ecommerce.billing.payment'
     version = '2.0-SNAPSHOT'
 
     sourceCompatibility = 11

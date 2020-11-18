@@ -1,9 +1,10 @@
 dependencies {
-    implementation project(':domain')
-    implementation 'com.ttulka.ecommerce.shipping:delivery-events:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.sales:order-events:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.billing:payment-events:2.0-SNAPSHOT'
-    implementation 'com.ttulka.ecommerce.warehouse:warehouse-events:2.0-SNAPSHOT'
+    api project(':shipping:dispatching:dispatching-domain')
+
+    api project(':shipping:delivery:delivery-events')
+    api project(':sales:order:order-events')
+    api project(':billing:payment:payment-events')
+    api project(':warehouse:warehouse-events')
 
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework:spring-tx'

@@ -1,9 +1,9 @@
 dependencies {
-    api project(':jdbc')
-    api project(':rest')
-    api project(':webcomp')
+    api project(':sales:order:order-jdbc')
+    api project(':sales:order:order-rest')
+    api project(':sales:order:order-webcomp')
 
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    api 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
 javadoc {
