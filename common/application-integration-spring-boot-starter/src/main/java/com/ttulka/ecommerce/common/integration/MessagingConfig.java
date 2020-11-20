@@ -1,31 +1,42 @@
 package com.ttulka.ecommerce.common.integration;
 
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import com.ttulka.ecommerce.common.events.DomainEvent;
 import com.ttulka.ecommerce.common.events.EventPublisher;
 
+import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.MethodIntrospector;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.Topic;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Configuration for messaging.
@@ -46,9 +57,8 @@ public class MessagingConfig {
     }
 
     /**
-     * Redis is used as a message broker.
-     * It brings its own implementation of {@code EventPublisher} to send events to the Redis server.
-     * Received message are then re-sent as Spring application events.
+     * Redis is used as a message broker. It brings its own implementation of {@code EventPublisher} to send events to the Redis server. Received message are
+     * then re-sent as Spring application events.
      */
     @Profile("redis")
     @Configuration
@@ -61,15 +71,19 @@ public class MessagingConfig {
         }
 
         @Bean
-        ChannelTopic applicationTopic() {
-            return new ChannelTopic("ecommerce");
-        }
-
-        @Bean
-        RedisMessageListenerContainer redisContainer(RedisConnectionFactory factory, MessageListenerAdapter adapter, Topic applicationTopic) {
+        RedisMessageListenerContainer redisContainer(
+                RedisConnectionFactory factory, MessageListenerAdapter adapter,
+                ApplicationContext context, ConfigurableListableBeanFactory beanFactory) {
             var container = new RedisMessageListenerContainer();
             container.setConnectionFactory(factory);
-            container.addMessageListener(new MessageListenerAdapter(adapter), applicationTopic);
+
+            // find all Spring event listeners and register Redis listeners only for those events:
+            var eventClasses = new SubscribedEvents(context, beanFactory).classes();
+            if (!eventClasses.isEmpty()) {
+                container.addMessageListener(adapter, eventClasses.stream()
+                        .map(Class::getSimpleName)
+                        .map(ChannelTopic::new).collect(toSet()));
+            }
             return container;
         }
 
@@ -102,13 +116,7 @@ public class MessagingConfig {
             @Transactional // important due to transactional listeners
             @Override
             public void onMessage(Message message, byte[] pattern) {
-                try {
-                    publisher.publishEvent(serializer.deserialize(message.getBody()));
-                } catch (SerializationException ignore) {
-                    // because a single topic is used for all events,
-                    // this happens when an event comes the service is not interested in
-                    // TODO better would be for a service to subscribe to a particular topic or topics
-                }
+                publisher.publishEvent(serializer.deserialize(message.getBody()));
             }
         }
 
@@ -119,12 +127,12 @@ public class MessagingConfig {
         static class ApplicationEventsListenerAdapter {
 
             private final RedisTemplate<String, DomainEvent> redisTemplate;
-            private final Topic applicationTopic;
 
             @TransactionalEventListener // only committed events are sent
             @Async
             public void on(DomainEventWrapper wrappedEvent) {
-                redisTemplate.convertAndSend(applicationTopic.getTopic(), wrappedEvent.getEvent());
+                DomainEvent event = wrappedEvent.getEvent();
+                redisTemplate.convertAndSend(event.getClass().getSimpleName(), event);
             }
         }
 
@@ -143,6 +151,46 @@ public class MessagingConfig {
         private static class DomainEventWrapper {
 
             private final DomainEvent event;
+        }
+    }
+
+    /**
+     * Finds the {@code EventListener}-annotated methods that listens to {@code DomainEvent} events.
+     */
+    @RequiredArgsConstructor
+    static class SubscribedEvents {
+
+        private final @NonNull ApplicationContext context;
+        private final @NonNull ConfigurableListableBeanFactory beanFactory;
+
+        public Set<Class<?>> classes() {
+            return classesAnnotatedWithComponent()
+                    .flatMap(this::methodsAnnotatedWithEventListener)
+                    .flatMap(this::eventClassesFromMethodParameters)
+                    .collect(toSet());
+        }
+
+        private Stream<? extends Class<?>> classesAnnotatedWithComponent() {
+            return Stream.of(context.getBeanNamesForAnnotation(Component.class))
+                    .map(bean -> AutoProxyUtils.determineTargetClass(beanFactory, bean))
+                    .filter(c -> !isSpringContainerClass(c));
+        }
+
+        private Stream<Method> methodsAnnotatedWithEventListener(Class<?> clazz) {
+            return MethodIntrospector.selectMethods(
+                    clazz,
+                    (MethodIntrospector.MetadataLookup<EventListener>) method ->
+                            AnnotatedElementUtils.findMergedAnnotation(method, EventListener.class))
+                    .keySet().stream();
+        }
+
+        private Stream<Class<?>> eventClassesFromMethodParameters(Method method) {
+            return Stream.of(method.getParameterTypes())
+                    .filter(DomainEvent.class::isAssignableFrom);
+        }
+
+        private boolean isSpringContainerClass(Class<?> clazz) {
+            return clazz.getName().startsWith("org.springframework.");
         }
     }
 }
