@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ttulka.ecommerce.common.events.DomainEvent;
 import com.ttulka.ecommerce.common.events.EventPublisher;
 
@@ -25,7 +27,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -35,6 +37,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -86,7 +89,7 @@ public class MessagingConfig {
             var eventClasses = new SubscribedEvents(context, beanFactory).classes();
             if (!eventClasses.isEmpty()) {
                 container.addMessageListener(adapter, eventClasses.stream()
-                        .map(Class::getSimpleName)
+                        .map(clazz -> topicNameFrom(clazz))
                         .map(ChannelTopic::new).collect(toSet()));
             }
             return container;
@@ -99,7 +102,7 @@ public class MessagingConfig {
 
         @Bean
             // it is important for this instance to be declared as a bean for @Transactional in {@code EventListenerApplicationAdapter} to take effect
-        EventListenerApplicationAdapter eventListenerApplicationAdapter(RedisSerializer redisSerializer, ApplicationEventPublisher applicationEventPublisher) {
+        EventListenerApplicationAdapter eventListenerApplicationAdapter(GenericJackson2JsonRedisSerializer redisSerializer, ApplicationEventPublisher applicationEventPublisher) {
             return new EventListenerApplicationAdapter(redisSerializer, applicationEventPublisher);
         }
 
@@ -111,17 +114,29 @@ public class MessagingConfig {
             return template;
         }
 
+        @Bean
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer() {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            return new GenericJackson2JsonRedisSerializer(mapper);
+        }
+
+        static String topicNameFrom(Class<?> eventClass) {
+            return eventClass.getCanonicalName();
+        }
+
         // listens to Redis messages, re-publishes as Spring application events
         @RequiredArgsConstructor
         static class EventListenerApplicationAdapter implements MessageListener {
 
-            private final RedisSerializer serializer;
+            private final GenericJackson2JsonRedisSerializer serializer;
             private final ApplicationEventPublisher publisher;
 
             @Transactional // important due to transactional listeners
+            @SneakyThrows
             @Override
             public void onMessage(Message message, byte[] pattern) {
-                publisher.publishEvent(serializer.deserialize(message.getBody()));
+                publisher.publishEvent(serializer.deserialize(message.getBody(), Class.forName(new String(message.getChannel()))));
             }
         }
 
@@ -137,16 +152,7 @@ public class MessagingConfig {
             @Async
             public void on(DomainEventWrapper wrappedEvent) {
                 DomainEvent event = wrappedEvent.getEvent();
-                redisTemplate.convertAndSend(event.getClass().getSimpleName(), event);
-            }
-        }
-
-        @Configuration
-        static class SerializationConfig {
-
-            @Bean
-            JdkSerializationRedisSerializer jdkSerializationRedisSerializer() {
-                return new JdkSerializationRedisSerializer();
+                redisTemplate.convertAndSend(topicNameFrom(event.getClass()), event);
             }
         }
 

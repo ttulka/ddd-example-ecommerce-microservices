@@ -5,21 +5,22 @@ import java.util.Map;
 
 import com.ttulka.ecommerce.common.events.DomainEvent;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
  * Order Placed domain event.
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "orderId")
 @ToString
 public final class OrderPlaced implements DomainEvent {
 
-    public final @NonNull Instant when;
-    public final @NonNull String orderId;
-    public final @NonNull Map<String, Integer> items;
-    public final @NonNull Float total;
+    public Instant when;
+    public String orderId;
+    public Map<String, Integer> items;
+    public Float total;
 }
