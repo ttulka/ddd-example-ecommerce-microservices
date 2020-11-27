@@ -7,8 +7,9 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-redis'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'com.h2database:h2'
-    implementation 'org.postgresql:postgresql'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
