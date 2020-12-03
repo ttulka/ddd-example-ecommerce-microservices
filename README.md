@@ -25,19 +25,23 @@ To set up and run microservices, see the [Docker](#docker-containers) and [Kuber
 
 ## Message Broker
 
-As the message broker a simple **Redis** instance could be used:
+As the message broker a simple **Redis** instance could be used with Spring profile `redis`:
 
 ```sh
 docker run --rm --name redis-broker -p 6379:6379 -d redis:6 redis-server
-```
 
-Start the application with Spring profile `redis`:
-
-```sh
 gradle :application:bootRun --args='--spring.profiles.active=redis'
 ```
 
-When the `redis` profile is not active, the system will fall-back to use of Spring application events as the default messaging mechanism.
+Alternatively, **RabbitMq** could be used as the message broker with Spring profile `rabbitmq`:
+
+```sh
+docker run --rm --name rabbitmq-broker -p 5672:5672 -d rabbitmq:3
+
+gradle :application:bootRun --args='--spring.profiles.active=rabbitmq'
+```
+
+When neither `redis` not `rabbitmq` profiles are active, the system will fall-back to use of Spring application events as the default messaging mechanism.
 
 ### Messaging Integration
 

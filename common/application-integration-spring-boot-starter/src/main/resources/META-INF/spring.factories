@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.ttulka.ecommerce.common.integration.MessagingConfig
+  com.ttulka.ecommerce.common.integration.messaging.MessagingConfig
