@@ -23,6 +23,8 @@ To run the monolithic application:
 
 To set up and run microservices, see the [Docker](#docker-containers) and [Kubernetes](#kubernetes) sections.
 
+Read more about monoliths vs microservices at https://blog.ttulka.com/good-and-bad-monolith
+
 ## Message Broker
 
 As the message broker a simple **Redis** instance could be used with Spring profile `redis`:
