@@ -18,7 +18,7 @@ Both monolithic and microservices deployments are implemented.
 To run the monolithic application:
 
 ```sh
-gradle :application:bootRun
+./gradlew :application:bootRun
 ```
 
 To set up and run microservices, see the [Docker](#docker-containers) and [Kubernetes](#kubernetes) sections.
@@ -30,7 +30,7 @@ As the message broker a simple **Redis** instance could be used with Spring prof
 ```sh
 docker run --rm --name redis-broker -p 6379:6379 -d redis:6 redis-server
 
-gradle :application:bootRun --args='--spring.profiles.active=redis'
+./gradlew :application:bootRun --args='--spring.profiles.active=redis'
 ```
 
 Alternatively, **RabbitMq** could be used as the message broker with Spring profile `rabbitmq`:
@@ -38,7 +38,7 @@ Alternatively, **RabbitMq** could be used as the message broker with Spring prof
 ```sh
 docker run --rm --name rabbitmq-broker -p 5672:5672 -d rabbitmq:3
 
-gradle :application:bootRun --args='--spring.profiles.active=rabbitmq'
+./gradlew :application:bootRun --args='--spring.profiles.active=rabbitmq'
 ```
 
 When neither `redis` not `rabbitmq` profiles are active, the system will fall-back to use of Spring application events as the default messaging mechanism.
@@ -66,7 +66,7 @@ docker run --rm --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=secret -d post
 Start the application with Spring profile `postgres`:
 
 ```sh
-gradle :application:bootRun --args='--spring.profiles.active=postgres'
+./gradlew :application:bootRun --args='--spring.profiles.active=postgres'
 ```
 
 When the `postgres` profile is not active, the system will fall-back to use H2 as the default database.
@@ -76,14 +76,14 @@ When the `postgres` profile is not active, the system will fall-back to use H2 a
 The project is a Gradle multi-project, all sub-projects can be built in a single command:
 
 ```sh
-gradle build
+./gradlew clean build
 ```
 
 ## Docker Containers
 
 Build an image per microservice via Gradle Spring Boot plugin:
 ```sh
-gradle bootBuildImage
+./gradlew bootBuildImage
 ```
 
 To run the containers:
@@ -157,7 +157,7 @@ eval $(minikube docker-env)
 
 Afterwards, build the docker images again for the Minikube's Docker daemon:
 ```sh
-gradle bootBuildImage
+./gradlew bootBuildImage
 ```
 
 Create deployments:

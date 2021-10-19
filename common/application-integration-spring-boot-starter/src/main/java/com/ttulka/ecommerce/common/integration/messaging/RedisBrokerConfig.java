@@ -36,9 +36,9 @@ import static java.util.stream.Collectors.toSet;
  * Redis is used as a message broker. It brings its own implementation of {@code EventPublisher} to send events to the Redis server.
  * Received message are then re-sent as Spring application events.
  * <p>
- * [Domain Publisher] -(DomainEvent)-> [EventPublisher] -(DomainEventWrapper)-> {Spring AppCtx}
- * --> [ApplicationEventsListenerAdapter] -(DomainEvent)-> {Redis Topic(DomainEvent.className)}
- * --> [EventListenerApplicationAdapter] -(DomainEvent)-> {Spring AppCtx} --> [Domain Listeners]
+ * [Domain Publisher] -(DomainEvent)⟶ [EventPublisher] -(DomainEventWrapper)⟶ {Spring AppCtx}
+ * ⟶ [ApplicationEventsListenerAdapter] -(DomainEvent)⟶ {Redis Topic(DomainEvent.className)}
+ * ⟶ [EventListenerApplicationAdapter] -(DomainEvent)⟶ {Spring AppCtx} ⟶ [Domain Listeners]
  */
 @Profile("redis")
 @Configuration

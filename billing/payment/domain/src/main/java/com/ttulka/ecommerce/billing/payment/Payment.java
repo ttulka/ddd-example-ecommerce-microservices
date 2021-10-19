@@ -14,13 +14,13 @@ public interface Payment {
     Money total();
 
     /**
-     * @throws {@link PaymentAlreadyRequestedException} when the payment has already been requested
+     * {@link PaymentAlreadyRequestedException} is thrown when the payment has already been requested
      */
     void request();
 
     /**
-     * @throws {@link PaymentNotRequestedYetException} when the payment has not been requested yet
-     * @throws {@link PaymentAlreadyCollectedException} when the payment has already collected
+     * {@link PaymentNotRequestedYetException} is thrown when the payment has not been requested yet
+     * {@link PaymentAlreadyCollectedException} is thrown when the payment has already collected
      */
     void collect();
 
@@ -29,19 +29,19 @@ public interface Payment {
     boolean isCollected();
 
     /**
-     * PaymentAlreadyRequestedException is thrown when an already requested Payment is requested.
+     * {@link PaymentAlreadyRequestedException} is thrown when an already requested Payment is requested.
      */
     final class PaymentAlreadyRequestedException extends IllegalStateException {
     }
 
     /**
-     * PaymentNotRequestedYetException is thrown when a Payment is collected but not requested yet.
+     * {@link PaymentNotRequestedYetException} is thrown when a Payment is collected but not requested yet.
      */
     final class PaymentNotRequestedYetException extends IllegalStateException {
     }
 
     /**
-     * PaymentAlreadyCollectedException is thrown when an already collected Payment is collected.
+     * {@link PaymentAlreadyCollectedException} is thrown when an already collected Payment is collected.
      */
     final class PaymentAlreadyCollectedException extends IllegalStateException {
     }

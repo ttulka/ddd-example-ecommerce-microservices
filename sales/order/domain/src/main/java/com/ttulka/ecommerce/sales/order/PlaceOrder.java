@@ -15,6 +15,7 @@ public interface PlaceOrder {
      *
      * @param orderId the order ID
      * @param items   the order items
+     * @param total   the total amount
      */
     void place(OrderId orderId, Collection<OrderItem> items, Money total);
 }

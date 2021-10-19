@@ -12,12 +12,12 @@ public interface Delivery {
     Address address();
 
     /**
-     * @throws {@link DeliveryAlreadyPreparedException} when already prepared.
+     * {@link DeliveryAlreadyPreparedException} is thrown when already prepared.
      */
     void prepare();
 
     /**
-     * @throws {@link DeliveryAlreadyDispatchedException} when already dispatched.
+     * {@link DeliveryAlreadyDispatchedException} is thrown when already dispatched.
      */
     void dispatch();
 
