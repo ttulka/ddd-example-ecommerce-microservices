@@ -10,11 +10,11 @@ ecommerce:
     max-pool-size: 5
 
 spring:
+  sql.init.mode: always
   datasource:
     url: ${ecommerce.database.url}
     username: ${ecommerce.database.username}
     password: ${ecommerce.database.password}
-    initialization-mode: always
     hikari:
       connection-timeout: ${ecommerce.database.timeout}
       maximum-pool-size: ${ecommerce.database.max-pool-size}

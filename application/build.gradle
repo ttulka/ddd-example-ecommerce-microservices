@@ -9,8 +9,8 @@ version = '2.0-SNAPSHOT'
 
 description = 'Monolithic application assembling all service in a single process.'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 dependencies {
     implementation project(':sales:catalog:catalog-spring-boot-starter')
@@ -33,7 +33,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
-    testImplementation 'com.tngtech.archunit:archunit:0.21.0'
+    testImplementation 'com.tngtech.archunit:archunit:0.23.1'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

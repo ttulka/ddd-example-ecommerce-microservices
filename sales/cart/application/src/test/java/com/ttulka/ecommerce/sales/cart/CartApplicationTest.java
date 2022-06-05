@@ -2,7 +2,7 @@ package com.ttulka.ecommerce.sales.cart;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 import io.restassured.filter.cookie.CookieFilter;
 import io.restassured.http.ContentType;
