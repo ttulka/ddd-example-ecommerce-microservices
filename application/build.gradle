@@ -33,7 +33,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.rest-assured:rest-assured'
-    testImplementation 'com.tngtech.archunit:archunit:0.23.1'
+    testImplementation 'com.tngtech.archunit:archunit:1.2.1'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
